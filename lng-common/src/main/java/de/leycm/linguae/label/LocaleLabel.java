@@ -26,8 +26,6 @@ public record LocaleLabel(
         @NonNull Function<Locale, String> fallback
         ) implements Label {
 
-    public LocaleLabel { }
-
     public LocaleLabel(@NonNull LinguaeProvider provider, @NonNull String key,
                        @NonNull Function<Locale, String> fallback) {
         this(provider, new Mappings(provider), key, fallback);

@@ -23,8 +23,6 @@ public record LiteralLabel(
         @NonNull String literal
 ) implements Label {
 
-    public LiteralLabel { }
-
     public LiteralLabel(@NonNull LinguaeProvider provider,
                         @NonNull String literal) {
         this(provider, new Mappings(provider), literal);
