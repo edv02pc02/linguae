@@ -137,14 +137,14 @@ subprojects {
 
                     licenses {
                         license {
-                            name.set("LECP License")
-                            url.set("https://github.com/leycm/leycm/blob/main/LICENSE")
+                            name.set("LGPL-3.0 License")
+                            url.set("https://www.gnu.org/licenses/lgpl-3.0.txt")
                         }
                     }
                     developers {
                         developer {
                             id.set("leycm")
-                            name.set("LeyCM")
+                            name.set("Lennard")
                             email.set("leycm@proton.me")
                         }
                     }
