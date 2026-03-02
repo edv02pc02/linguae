@@ -1,12 +1,12 @@
-/**
- * LECP-LICENSE NOTICE
- * <br><br>
- * This Sourcecode is under the LECP-LICENSE. <br>
- * License at: <a href="https://github.com/leycm/leycm/blob/main/LICENSE">GITHUB</a>
- * <br><br>
- * Copyright (c) LeyCM <a href="mailto:leycm@proton.me">leycm@proton.me</a> l <br>
- * Copyright (c) maintainers <br>
- * Copyright (c) contributors
+/*
+ * This file is part of the linguae Library.
+ *
+ * Licensed under the GNU Lesser General Public License v3.0 (LGPL-3.0)
+ * You should have received a copy of the license in LICENSE.LGPL
+ * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Copyright (c) leycm <leycm@proton.me>
+ * Copyright (c) maintainers
  */
 package de.leycm.linguae;
 
@@ -22,7 +22,6 @@ import org.jetbrains.annotations.Contract;
 
 import java.text.ParseException;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -37,7 +36,7 @@ import java.util.function.Function;
  * and properly initialized before use.</p>
  *
  * @since 1.0.1
- * @author Lennard [leycm@proton.me]
+ * @author Lennard <a href="mailto:leycm@proton.me">leycm@proton.me</a>
  */
 public interface LinguaeProvider extends Initializable {
 

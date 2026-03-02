@@ -1,14 +1,16 @@
-/**
- * LECP-LICENSE NOTICE
- * <br><br>
- * This Sourcecode is under the LECP-LICENSE. <br>
- * License at: <a href="https://github.com/leycm/leycm/blob/main/LICENSE">GITHUB</a>
- * <br><br>
- * Copyright (c) LeyCM <a href="mailto:leycm@proton.me">leycm@proton.me</a> l <br>
- * Copyright (c) maintainers <br>
- * Copyright (c) contributors
+/*
+ * This file is part of the linguae Library.
+ *
+ * Licensed under the GNU Lesser General Public License v3.0 (LGPL-3.0)
+ * You should have received a copy of the license in LICENSE.LGPL
+ * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Copyright (c) leycm <leycm@proton.me>
+ * Copyright (c) maintainers
  */
 package de.leycm.linguae.exeption;
+
+import lombok.NonNull;
 
 /**
  * Exception thrown when a formatting or serialization process fails.
@@ -32,7 +34,7 @@ package de.leycm.linguae.exeption;
  * where formatting failures are considered programmer or data errors.</p>
  *
  * @since 1.2.0
- * @author Lennard [leycm@proton.me]
+ * @author Lennard <a href="mailto:leycm@proton.me">leycm@proton.me</a>
  */
 public class FormatException extends RuntimeException {
 
@@ -48,7 +50,7 @@ public class FormatException extends RuntimeException {
      *
      * @param message the detail message
      */
-    public FormatException(String message) {
+    public FormatException(final @NonNull String message) {
         super(message);
     }
 
@@ -59,7 +61,7 @@ public class FormatException extends RuntimeException {
      * @param message the detail message
      * @param cause the cause of this exception
      */
-    public FormatException(String message, Throwable cause) {
+    public FormatException(final @NonNull String message, final @NonNull Throwable cause) {
         super(message, cause);
     }
 
@@ -68,7 +70,7 @@ public class FormatException extends RuntimeException {
      *
      * @param cause the cause of this exception
      */
-    public FormatException(Throwable cause) {
+    public FormatException(final @NonNull Throwable cause) {
         super(cause);
     }
 
@@ -80,9 +82,10 @@ public class FormatException extends RuntimeException {
      * @param enableSuppression whether suppression is enabled
      * @param writableStackTrace whether the stack trace should be writable
      */
-    protected FormatException(String message, Throwable cause,
-                              boolean enableSuppression,
-                              boolean writableStackTrace) {
+    protected FormatException(final @NonNull String message,
+                              final @NonNull Throwable cause,
+                              final boolean enableSuppression,
+                              final boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }
