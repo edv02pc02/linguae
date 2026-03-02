@@ -33,13 +33,13 @@ import java.util.stream.Collectors;
  *
  * <p>This implementation supports both local file system and remote HTTP sources:
  * <ul>
- *   <li>Local: {@code file:///path/to/translations/} or {@code /path/to/translations/}</li>
+ *   <li>Local: {@code /path/to/translations/}</li>
  *   <li>Remote: {@code https://example.com/translations/}</li>
  * </ul>
  * </p>
  *
  * <p>Translation files must be named according to the locale language tag,
- * for example: {@code en.json}, {@code de_DE.json}, {@code zh-CN.json}.</p>
+ * for example: {@code en_US.json}, {@code de_DE.json}, {@code zh_CN.json}.</p>
  *
  * <p>Each JSON file should contain a flat map of translation keys to values:</p>
  * <pre>{@code
@@ -119,7 +119,7 @@ public class JsonFileSource implements LinguaeSource {
      * by underscores (e.g. {@code zh-CN} → {@code zh_CN.json}).</p>
      *
      * @param locale the {@link Locale} to load translations for; must not be {@code null}.
-     * @return a map of translation keys to localized strings; empty if file not found or invalid.
+     * @return a map of translation keys to localized strings; empty if the file is not found.
      * @throws Exception if loading fails due to I/O errors, network issues, or JSON parsing errors.
      * @throws NullPointerException if {@code locale} is {@code null}
      */
@@ -127,11 +127,8 @@ public class JsonFileSource implements LinguaeSource {
     public @NonNull Map<String, String> loadLanguage(@NonNull Locale locale) throws Exception {
         String fileName = locale.toLanguageTag().replace("-", "_") + ".json";
 
-        if (remote) {
-            return loadRemote(fileName);
-        } else {
-            return loadLocal(fileName);
-        }
+        if (remote) {return loadRemote(fileName);
+        } else {return loadLocal(fileName);}
     }
 
     /**
@@ -165,10 +162,10 @@ public class JsonFileSource implements LinguaeSource {
      * Loads translations from a local JSON file.
      *
      * <p>Reads the file from {@code basePath + fileName} and parses it as JSON.
-     * Returns an empty map if the file does not exist or contains invalid JSON.</p>
+     * Returns an empty map if the file does not exist.</p>
      *
      * @param fileName the JSON filename to load; must not be {@code null}
-     * @return a map of translation keys to values; empty if file not found or invalid
+     * @return a map of translation keys to values; empty if file not found
      * @throws Exception if file reading fails or JSON parsing encounters an error
      * @throws NullPointerException if {@code fileName} is {@code null}
      */

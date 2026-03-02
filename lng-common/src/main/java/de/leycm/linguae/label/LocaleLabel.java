@@ -23,12 +23,17 @@ import java.util.function.Function;
  * A translatable {@link Label} implementation that resolves text at runtime
  * based on the current locale and available translation resources.
  *
- * <p>This record stores the translation key and fallback function, performing
- * actual translation lookup when {@link #in(Locale)} is called. The fallback
- * function is used when no translation is found for the requested locale.</p>
+ * <p>This record stores the translation key, mappings, and fallback function,
+ * performing the actual translation lookup when {@link #in(Locale)} is called.
+ * The fallback function is used when no translation is found for the requested
+ * locale.</p>
  *
- * <p>Instances are immutable and thread-safe, as all state is final and
- * translation lookup is delegated to the thread-safe provider.</p>
+ * <p>The record components themselves are final, so the association between
+ * provider, mappings, key and fallback does not change once constructed.
+ * However, the {@link Mappings} instance referenced by this label is mutable
+ * and is shared with the caller. Mutating that {@code Mappings} will affect
+ * the behavior of this label, and concurrent modifications must be externally
+ * synchronized if thread-safety is required.</p>
  *
  * @since 1.0.1
  * @author Lennard <a href="mailto:leycm@proton.me">leycm@proton.me</a>

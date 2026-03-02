@@ -105,7 +105,7 @@ public record Mappings(@NonNull List<Mapping> mappings,
      *
      * @param key the placeholder key to replace; must not be {@code null}
      * @param supplier the supplier providing the value to substitute; must not be {@code null}
-     * @return a new {@link Mappings} instance with the added mapping; never {@code null}
+     * @return this {@link Mappings} instance with the added mapping; never {@code null}
      * @throws NullPointerException if {@code key} or {@code supplier} is {@code null}
      */
     public @NonNull Mappings add(final @NonNull String key,
@@ -116,10 +116,13 @@ public record Mappings(@NonNull List<Mapping> mappings,
     /**
      * Adds a new mapping using the default placeholder rule from the specified provider.
      *
+     * <p>The value is converted to string using {@code String#valueOf(Object)}.
+     * Returns this {@link Mappings} instance, leaving the original unchanged.</p>
+     *
      * @param provider the {@link LinguaeProvider} to get the default placeholder rule from; must not be {@code null}
      * @param key the placeholder key to replace; must not be {@code null}
      * @param supplier the supplier providing the value to substitute; must not be {@code null}
-     * @return a new {@link Mappings} instance with the added mapping; never {@code null}
+     * @return this {@link Mappings} instance with the added mapping; never {@code null}
      * @throws NullPointerException if {@code provider}, {@code key}, or {@code supplier} is {@code null}
      */
     public @NonNull Mappings add(final @NonNull LinguaeProvider provider,
@@ -132,12 +135,12 @@ public record Mappings(@NonNull List<Mapping> mappings,
      * Adds a new mapping with the specified rule, key, and value supplier.
      *
      * <p>The value is converted to string using {@code String#valueOf(Object)}.
-     * Returns a new {@link Mappings} instance, leaving the original unchanged.</p>
+     * Returns this {@link Mappings} instance, leaving the original unchanged.</p>
      *
      * @param rule the mapping rule to use for this placeholder; must not be {@code null}
      * @param key the placeholder key to replace; must not be {@code null}
      * @param supplier the supplier providing the value to substitute; must not be {@code null}
-     * @return a new {@link Mappings} instance with the added mapping; never {@code null}
+     * @return this {@link Mappings} instance with the added mapping; never {@code null}
      * @throws NullPointerException if {@code rule}, {@code key}, or {@code supplier} is {@code null}
      */
     public @NonNull Mappings add(final @NonNull MappingRule rule,
@@ -149,10 +152,10 @@ public record Mappings(@NonNull List<Mapping> mappings,
     /**
      * Adds a new mapping with the specified {@link Mapping} object.
      *
-     * <p>Returns a new {@link Mappings} instance, leaving the original unchanged.</p>
+     * <p>Returns this {@link Mappings} instance, leaving the original unchanged.</p>
      *
      * @param mapping the mapping to add; must not be {@code null}
-     * @return a new {@link Mappings} instance with the added mapping; never {@code null}
+     * @return this {@link Mappings} instance with the added mapping; never {@code null}
      * @throws NullPointerException if {@code mapping} is {@code null}
      */
     public @NonNull Mappings add(final @NonNull Mapping mapping) {

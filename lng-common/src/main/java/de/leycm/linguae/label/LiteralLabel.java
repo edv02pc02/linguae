@@ -32,7 +32,12 @@ import java.util.Locale;
  *   <li>Consistent handling with translatable labels in the same API</li>
  * </ul>
  *
- * <p>Instances are immutable and thread-safe, as all state is final.</p>
+ * <p>The {@code provider} and {@code literal} components of this record are
+ * immutable references, but the associated {@link Mappings} instance is
+ * mutable and is exposed via {@link #mappings()}. Mutating the mappings will
+ * affect how this label is rendered. As a consequence, {@code LiteralLabel}
+ * instances are not strictly immutable, and thread-safety depends on how the
+ * underlying {@code Mappings} are shared and mutated by callers.</p>
  *
  * @since 1.0.1
  * @author Lennard <a href="mailto:leycm@proton.me">leycm@proton.me</a>
