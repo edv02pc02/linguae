@@ -36,7 +36,7 @@ import java.text.ParseException;
  * deserialization.</p>
  *
  * @since 1.2.0
- * @author Lennard [leycm@proton.me]
+ * @author Lennard <a href="mailto:leycm@proton.me">leycm@proton.me</a>
  * @param <T> the external representation type (e.g. String, byte[], JsonObject)
  */
 public interface LabelSerializer<T> {

@@ -1,12 +1,12 @@
-/**
- * LECP-LICENSE NOTICE
- * <br><br>
- * This Sourcecode is under the LECP-LICENSE. <br>
- * License at: <a href="https://github.com/leycm/leycm/blob/main/LICENSE">GITHUB</a>
- * <br><br>
- * Copyright (c) LeyCM <a href="mailto:leycm@proton.me">leycm@proton.me</a> <br>
- * Copyright (c) maintainers <br>
- * Copyright (c) contributors
+/*
+ * This file is part of the linguae Library.
+ *
+ * Licensed under the GNU Lesser General Public License v3.0 (LGPL-3.0)
+ * You should have received a copy of the license in LICENSE.LGPL
+ * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Copyright (c) leycm <leycm@proton.me>
+ * Copyright (c) maintainers
  */
 package de.leycm.linguae;
 
@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 /**
  * A localizable text element that can be rendered into a string for a given {@link Locale}.
  *
- * <p>Labels come in two flavours:</p>
+ * <p>Labels come in two flavors:</p>
  * <ul>
  *   <li><b>Translatable</b> – resolved at runtime via resource bundles keyed by a translation key.</li>
  *   <li><b>Literal</b> – static text returned verbatim, without any lookup.</li>
@@ -63,7 +63,7 @@ import java.util.function.Supplier;
  * @see Mappings
  * @see Mapping
  * @since 1.0.1
- * @author Lennard (<a href="mailto:leycm@proton.me">leycm@proton.me</a>)
+ * @author Lennard <a href="mailto:leycm@proton.me">leycm@proton.me</a>
  */
 public interface Label {
 

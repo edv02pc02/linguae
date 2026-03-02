@@ -1,12 +1,12 @@
-/**
- * LECP-LICENSE NOTICE
- * <br><br>
- * This Sourcecode is under the LECP-LICENSE. <br>
- * License at: <a href="https://github.com/leycm/leycm/blob/main/LICENSE">GITHUB</a>
- * <br><br>
- * Copyright (c) LeyCM <a href="mailto:leycm@proton.me">leycm@proton.me</a> l <br>
- * Copyright (c) maintainers <br>
- * Copyright (c) contributors
+/*
+ * This file is part of the linguae Library.
+ *
+ * Licensed under the GNU Lesser General Public License v3.0 (LGPL-3.0)
+ * You should have received a copy of the license in LICENSE.LGPL
+ * If not, see https://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Copyright (c) leycm <leycm@proton.me>
+ * Copyright (c) maintainers
  */
 package de.leycm.linguae.mapping;
 
@@ -27,9 +27,9 @@ import java.util.function.Supplier;
  *
  * <p>Instances are immutable - all modification operations return new instances.</p>
  *
- * @param mappings a List of Mapping objects to start with
  * @since 1.0.1
- * @author Lennard [leycm@proton.me]
+ * @author Lennard <a href="mailto:leycm@proton.me">leycm@proton.me</a>
+ * @param mappings a List of Mapping objects to start with
  */
 public record Mappings(@NonNull List<Mapping> mappings,
                        @NonNull LinguaeProvider provider) {
