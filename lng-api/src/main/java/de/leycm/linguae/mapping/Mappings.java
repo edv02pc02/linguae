@@ -35,44 +35,45 @@ public record Mappings(@NonNull List<Mapping> mappings,
                        @NonNull LinguaeProvider provider) {
 
     /**
-     * Constructs an empty Mappings with no mappings.
+     * Constructs an empty {@link Mappings} with no mappings.
      */
     public Mappings() {
         this(new ArrayList<>());
     }
 
     /**
-     * Constructs an empty Mappings with no mappings but a special {@link LinguaeProvider}.
+     * Constructs an empty {@link Mappings} with no mappings but a specified {@link LinguaeProvider}.
      *
      * <p>The provided list is copied to ensure immutability.</p>
      *
-     * @param provider the provider to resolve Rules
-     * @throws NullPointerException if mappings is null
+     * @param provider the provider to resolve mapping rules; must not be {@code null}
+     * @throws NullPointerException if {@code provider} is {@code null}
      */
     public Mappings(final @NonNull LinguaeProvider provider) {
         this(new ArrayList<>(), provider);
     }
 
     /**
-     * Constructs a Mappings with the specified mappings.
+     * Constructs a {@link Mappings} with the specified mappings.
      *
-     * <p>The provided list is copied to ensure immutability.</p>
+     * <p>The provided list is copied to ensure immutability. Uses the default
+     * {@link LinguaeProvider} instance for resolving mapping rules.</p>
      *
-     * @param mappings the initial mappings to include
-     * @throws NullPointerException if mappings is null
+     * @param mappings the initial mappings to include; must not be {@code null}
+     * @throws NullPointerException if {@code mappings} is {@code null}
      */
     public Mappings(final @NonNull List<Mapping> mappings) {
         this(mappings, LinguaeProvider.getInstance());
     }
 
     /**
-     * Constructs a Mappings with the specified mappings.
+     * Constructs a {@link Mappings} with the specified mappings and provider.
      *
      * <p>The provided list is copied to ensure immutability.</p>
      *
-     * @param mappings the initial mappings to include
-     * @param provider the provider to resolve Rules
-     * @throws NullPointerException if mappings or provider is null
+     * @param mappings the initial mappings to include; must not be {@code null}
+     * @param provider the provider to resolve mapping rules; must not be {@code null}
+     * @throws NullPointerException if {@code mappings} or {@code provider} is {@code null}
      */
     public Mappings(final @NonNull List<Mapping> mappings,
                     final @NonNull LinguaeProvider provider) {
@@ -83,13 +84,13 @@ public record Mappings(@NonNull List<Mapping> mappings,
     /**
      * Adds a new mapping using the default placeholder rule from the default provider.
      *
-     * <p>This is a convenience method that uses the singleton LinguaeProvider instance
-     * and its default placeholder rule.</p>
+     * <p>This is a convenience method that uses the singleton {@link LinguaeProvider}
+     * instance and its default placeholder rule.</p>
      *
-     * @param key the placeholder key to replace
-     * @param value the value to substitute
-     * @return a new Mappings instance with the added mapping, never null
-     * @throws NullPointerException if key or value is null
+     * @param key the placeholder key to replace; must not be {@code null}
+     * @param value the value to substitute; must not be {@code null}
+     * @return a new {@link Mappings} instance with the added mapping; never {@code null}
+     * @throws NullPointerException if {@code key} or {@code value} is {@code null}
      */
     public @NonNull Mappings add(final @NonNull String key,
                                  final @NonNull Object value) {
@@ -99,13 +100,13 @@ public record Mappings(@NonNull List<Mapping> mappings,
     /**
      * Adds a new mapping using the default placeholder rule from the default provider.
      *
-     * <p>This is a convenience method that uses the singleton LinguaeProvider instance
-     * and its default placeholder rule.</p>
+     * <p>This is a convenience method that uses the singleton {@link LinguaeProvider}
+     * instance and its default placeholder rule.</p>
      *
-     * @param key the placeholder key to replace
-     * @param supplier the supplier providing the value to substitute
-     * @return a new Mappings instance with the added mapping, never null
-     * @throws NullPointerException if key or value is null
+     * @param key the placeholder key to replace; must not be {@code null}
+     * @param supplier the supplier providing the value to substitute; must not be {@code null}
+     * @return a new {@link Mappings} instance with the added mapping; never {@code null}
+     * @throws NullPointerException if {@code key} or {@code supplier} is {@code null}
      */
     public @NonNull Mappings add(final @NonNull String key,
                                  final @NonNull Supplier<Object> supplier) {
@@ -115,11 +116,11 @@ public record Mappings(@NonNull List<Mapping> mappings,
     /**
      * Adds a new mapping using the default placeholder rule from the specified provider.
      *
-     * @param provider the {@link LinguaeProvider} to get the default placeholder rule from
-     * @param key the placeholder key to replace
-     * @param supplier the supplier providing the value to substitute
-     * @return a new Mappings instance with the added mapping, never null
-     * @throws NullPointerException if provider, key, or value is null
+     * @param provider the {@link LinguaeProvider} to get the default placeholder rule from; must not be {@code null}
+     * @param key the placeholder key to replace; must not be {@code null}
+     * @param supplier the supplier providing the value to substitute; must not be {@code null}
+     * @return a new {@link Mappings} instance with the added mapping; never {@code null}
+     * @throws NullPointerException if {@code provider}, {@code key}, or {@code supplier} is {@code null}
      */
     public @NonNull Mappings add(final @NonNull LinguaeProvider provider,
                                  final @NonNull String key,
@@ -128,16 +129,16 @@ public record Mappings(@NonNull List<Mapping> mappings,
     }
 
     /**
-     * Adds a new mapping with the specified rule, key, and value.
+     * Adds a new mapping with the specified rule, key, and value supplier.
      *
-     * <p>The value is converted to string using {@link String#valueOf(Object)}.
-     * Returns a new Mappings instance, leaving the original unchanged.</p>
+     * <p>The value is converted to string using {@code String#valueOf(Object)}.
+     * Returns a new {@link Mappings} instance, leaving the original unchanged.</p>
      *
-     * @param rule the mapping rule to use for this placeholder
-     * @param key the placeholder key to replace
-     * @param supplier the supplier providing the value to substitute
-     * @return a new Mappings instance with the added mapping, never null
-     * @throws NullPointerException if rule, key, or value is null
+     * @param rule the mapping rule to use for this placeholder; must not be {@code null}
+     * @param key the placeholder key to replace; must not be {@code null}
+     * @param supplier the supplier providing the value to substitute; must not be {@code null}
+     * @return a new {@link Mappings} instance with the added mapping; never {@code null}
+     * @throws NullPointerException if {@code rule}, {@code key}, or {@code supplier} is {@code null}
      */
     public @NonNull Mappings add(final @NonNull MappingRule rule,
                                  final @NonNull String key,
@@ -146,14 +147,13 @@ public record Mappings(@NonNull List<Mapping> mappings,
     }
 
     /**
-     * Adds a new mapping with the specified rule, key, and value.
+     * Adds a new mapping with the specified {@link Mapping} object.
      *
-     * <p>The value is converted to string using {@link String#valueOf(Object)}.
-     * Returns a new Mappings instance, leaving the original unchanged.</p>
+     * <p>Returns a new {@link Mappings} instance, leaving the original unchanged.</p>
      *
-     * @param mapping the mapping to use
-     * @return a new Mappings instance with the added mapping, never null
-     * @throws NullPointerException if rule, key, or value is null
+     * @param mapping the mapping to add; must not be {@code null}
+     * @return a new {@link Mappings} instance with the added mapping; never {@code null}
+     * @throws NullPointerException if {@code mapping} is {@code null}
      */
     public @NonNull Mappings add(final @NonNull Mapping mapping) {
         mappings.add(mapping);
@@ -166,9 +166,9 @@ public record Mappings(@NonNull List<Mapping> mappings,
      * <p>Mappings are applied in the order they were added. If no mappings are present,
      * the original text is returned unchanged.</p>
      *
-     * @param text the input text containing placeholders
-     * @return the text with all placeholders replaced by their mapped values, never null
-     * @throws NullPointerException if text is null
+     * @param text the input text containing placeholders; must not be {@code null}
+     * @return the text with all placeholders replaced by their mapped values; never {@code null}
+     * @throws NullPointerException if {@code text} is {@code null}
      */
     public @NonNull String apply(final @NonNull String text) {
         if (mappings.isEmpty()) return text;
@@ -182,18 +182,18 @@ public record Mappings(@NonNull List<Mapping> mappings,
     }
 
     /**
-     * Returns the number of mappings in this mapper.
+     * Returns the number of mappings in this container.
      *
-     * @return the number of mappings, never negative
+     * @return the number of mappings; never negative
      */
     public int size() {
         return mappings.size();
     }
 
     /**
-     * Checks if this mapper contains no mappings.
+     * Checks if this container contains no mappings.
      *
-     * @return true if there are no mappings, false otherwise
+     * @return {@code true} if there are no mappings; {@code false} otherwise
      */
     public boolean isEmpty() {
         return mappings.isEmpty();

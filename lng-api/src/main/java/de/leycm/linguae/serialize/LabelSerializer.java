@@ -47,19 +47,19 @@ public interface LabelSerializer<T> {
      * <p>The resulting format is implementation-dependent and may vary
      * depending on the concrete serializer implementation.</p>
      *
-     * @param label the Label to serialize
-     * @return the external serialized representation
-     * @throws NullPointerException if label is null
+     * @param label the {@link Label} to serialize; must not be {@code null}
+     * @return the external serialized representation; never {@code null}
+     * @throws NullPointerException if {@code label} is {@code null}
      */
     @NonNull T serialize(@NonNull Label label);
 
     /**
      * Deserializes an external representation back into a {@link Label}.
      *
-     * @param serialized the external representation to deserialize
-     * @return the deserialized Label instance
-     * @throws ParseException if the serialized representation cannot be parsed into a Label
-     * @throws NullPointerException if serialized is null
+     * @param serialized the external representation to deserialize; must not be {@code null}
+     * @return the deserialized {@link Label} instance; never {@code null}
+     * @throws ParseException if the serialized representation cannot be parsed into a {@link Label}
+     * @throws NullPointerException if {@code serialized} is {@code null}
      */
     @NonNull Label deserialize(@NonNull T serialized)
             throws ParseException;
@@ -67,12 +67,13 @@ public interface LabelSerializer<T> {
     /**
      * Formats a translated raw string into an external serialized representation.
      *
-     * <p>This method behaves similar to {@link #serialize(Label)}, but
-     * takes a raw translated string as input instead of a Label instance.</p>
+     * <p>This method behaves similarly to {@link #serialize(Label)}, but
+     * takes a raw translated string as input instead of a {@link Label} instance.</p>
      *
-     * @param input the translated/raw input string to format
-     * @return the formatted external representation
-     * @throws NullPointerException if translated is null
+     * @param input the translated/raw input string to format; must not be {@code null}
+     * @return the formatted external representation; never {@code null}
+     * @throws NullPointerException if {@code input} is {@code null}
+     * @throws FormatException if the input cannot be formatted
      */
     @NonNull T format(@NonNull String input)
             throws FormatException;

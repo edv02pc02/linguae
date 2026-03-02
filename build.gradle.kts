@@ -1,21 +1,14 @@
 import java.util.Properties
 
-/**
- * ───────────────────────────────────────────────────────
- *  Root Gradle Build (Global Config + Subprojects)
- * ───────────────────────────────────────────────────────
- */
+// Root Gradle Build (Global Config + Subprojects)
 
 plugins {
     java
     `maven-publish`
-    alias(libs.plugins.shadow) apply false
     alias(libs.plugins.lombok) apply false
 }
 
-//  ─────────────────────────────────────────────
-//  Project Metadata
-//  ─────────────────────────────────────────────
+// Project Metadata
 group = property("group")!!
 version = property("version")!!
 
@@ -23,9 +16,7 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(property("javaVersion").toString().toInt()))
 }
 
-//  ─────────────────────────────────────────────
-//  Repositories for all modules
-//  ─────────────────────────────────────────────
+// Repositories for all modules
 allprojects {
     group = property("group")!!
     version = property("version")!!
@@ -41,9 +32,7 @@ allprojects {
     }
 }
 
-//  ─────────────────────────────────────────────
-//  Load gradle.properties from subprojects
-//  ─────────────────────────────────────────────
+// Load gradle.properties from subprojects
 subprojects.forEach { sub ->
     val subProps = sub.file("gradle.properties")
     if (subProps.exists()) {
@@ -55,9 +44,7 @@ subprojects.forEach { sub ->
     }
 }
 
-//  ─────────────────────────────────────────────
-//  Sync root properties into all subprojects
-//  ─────────────────────────────────────────────
+// Sync root properties into all subprojects
 val rootProps = Properties().apply {
     val file = rootProject.file("gradle.properties")
     if (file.exists()) {
@@ -70,9 +57,7 @@ rootProps.forEach { (k, v) ->
     subprojects.forEach { sub -> sub.extra[k.toString()] = v }
 }
 
-//  ─────────────────────────────────────────────
-//  Default configuration for all subprojects
-//  ─────────────────────────────────────────────
+// Default configuration for all subprojects
 subprojects {
     apply(plugin = "java")
     apply(plugin = "maven-publish")
@@ -93,10 +78,6 @@ subprojects {
         options.encoding = "UTF-8"
     }
 
-    /**
-     * Custom Jar configuration:
-     * Combines all runtime dependencies directly into the artifact.
-     */
     tasks.withType<Jar> {
         archiveBaseName.set("${rootProject.name}-${project.name}")
 
@@ -109,19 +90,12 @@ subprojects {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
-    /**
-     * Inherit dependencies from root’s `implementation`
-     */
     dependencies {
         rootProject.configurations.findByName("implementation")?.dependencies?.forEach { dep ->
             implementation(dep)
         }
     }
 
-    /**
-     * Maven publishing configuration:
-     * Publishes to local `../repository`
-     */
     publishing {
         publications {
             create<MavenPublication>("mavenJava") {
@@ -174,9 +148,7 @@ subprojects {
     }
 }
 
-//  ─────────────────────────────────────────────
-//  Custom Build Task: `packets`
-//  ─────────────────────────────────────────────
+//  Custom Build Task: "packets"
 tasks.register("packets") {
     group = "build"
     description = "Builds all platform variants and copies them into /out"

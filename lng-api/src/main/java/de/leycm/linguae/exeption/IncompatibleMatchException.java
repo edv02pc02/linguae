@@ -24,21 +24,28 @@ import lombok.NonNull;
 public class IncompatibleMatchException extends IllegalArgumentException {
 
     /**
-     * Constructs a new {@code IncompatibleMatchException} with the specified detail message.
+     * Constructs a new {@code IncompatibleMatchException} for the specified type.
      *
-     * @param type the expected type that was incompatible
-     * @throws NullPointerException if type or cause is null
+     * <p>This constructor creates an exception with a default message indicating
+     * that a serializer for the given type returned an incompatible result.</p>
+     *
+     * @param type the expected type that was incompatible; must not be {@code null}
+     * @throws NullPointerException if {@code type} is {@code null}
      */
     public IncompatibleMatchException(final @NonNull Class<?> type) {
         super("Serializer for type " + type.getName() + " returned incompatible type");
     }
 
     /**
-     * Constructs a new {@code IncompatibleMatchException} with the specified detail message.
+     * Constructs a new {@code IncompatibleMatchException} for the specified type with cause.
      *
-     * @param type the expected type that was incompatible
-     * @param cause the cause of this exception
-     * @throws NullPointerException if type or cause is null
+     * <p>This constructor creates an exception with a default message indicating
+     * that a serializer for the given type returned an incompatible result,
+     * and includes the underlying cause.</p>
+     *
+     * @param type the expected type that was incompatible; must not be {@code null}
+     * @param cause the underlying cause of this exception; must not be {@code null}
+     * @throws NullPointerException if {@code type} or {@code cause} is {@code null}
      */
     public IncompatibleMatchException(final @NonNull Class<?> type, final @NonNull Throwable cause) {
         super("Serializer for type " + type.getName() + " returned incompatible type", cause);

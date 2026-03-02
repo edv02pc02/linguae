@@ -57,15 +57,15 @@ public class MappingRule {
     private final Pattern pattern;
 
     /**
-     * Constructs a new PsPattern with the specified prefix and suffix.
+     * Constructs a new {@link MappingRule} with specified prefix and suffix.
      *
      * <p>The pattern is compiled to efficiently match placeholders in the format:
      * {@code prefix + content + suffix}. The content is captured as a group and
      * cannot contain the first character of the suffix for proper termination.</p>
      *
-     * @param prefix the prefix delimiter for placeholders
-     * @param suffix the suffix delimiter for placeholders
-     * @throws NullPointerException if prefix or suffix is null
+     * @param prefix the prefix delimiter for placeholders; must not be {@code null}
+     * @param suffix the suffix delimiter for placeholders; must not be {@code null}
+     * @throws NullPointerException if {@code prefix} or {@code suffix} is {@code null}
      */
     public MappingRule(final @NonNull String prefix, final @NonNull String suffix) {
         this.prefix = prefix;
@@ -82,7 +82,7 @@ public class MappingRule {
     /**
      * Returns the prefix delimiter for this mapping rule.
      *
-     * @return the prefix delimiter, never null
+     * @return the prefix delimiter; never {@code null}
      */
     public @NonNull String getPrefix() {
         return prefix;
@@ -91,7 +91,7 @@ public class MappingRule {
     /**
      * Returns the suffix delimiter for this mapping rule.
      *
-     * @return the suffix delimiter, never null
+     * @return the suffix delimiter; never {@code null}
      */
     public @NonNull String getSuffix() {
         return suffix;
@@ -103,7 +103,7 @@ public class MappingRule {
      * <p>The pattern is optimized for matching placeholders that follow the
      * prefix-content-suffix structure defined by this rule.</p>
      *
-     * @return the compiled regex pattern, never null
+     * @return the compiled regex pattern; never {@code null}
      */
     public @NonNull Pattern getPattern() {
         return pattern;
