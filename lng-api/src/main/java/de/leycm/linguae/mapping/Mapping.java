@@ -45,8 +45,8 @@ public record Mapping(@NonNull MappingRule rule,
      * Applies this mapping to the input text, replacing matched placeholders.
      *
      * @param text the input text to process
-     * @return the text with placeholders replaced by their mapped values, never null
-     * @throws NullPointerException if text is null
+     * @return the text with placeholders replaced by their mapped values; never {@code null}
+     * @throws NullPointerException if {@code text} is {@code null}
      */
     public @NonNull String apply(final @NonNull String text) {
         final Matcher matcher = rule.getPattern().matcher(text);

@@ -47,30 +47,24 @@ public interface LinguaeSource {
     /**
      * Returns all languages that are supported by this translation source.
      *
-     * <p>
-     * Implementations may return an empty list if the supported languages cannot be
-     * determined (e.g. remote directory scanning is unavailable, disabled, or failed).
-     * </p>
+     * <p>Implementations may return an empty list if supported languages cannot be
+     * determined (e.g. remote directory scanning is unavailable, disabled, or failed).</p>
      *
-     * @return an immutable or mutable list of supported {@link Locale Locales}, never {@code null}
+     * @return an immutable or mutable list of supported {@link Locale} instances; never {@code null}
      */
     @NonNull List<Locale> getSupportedLanguages();
 
     /**
      * Loads all translations for the given language.
      *
-     * <p>
-     * The returned map must contain translation keys as map keys and their resolved
-     * localized values as map values.
-     * </p>
+     * <p>The returned map must contain translation keys as map keys and their resolved
+     * localized values as map values.</p>
      *
-     * <p>
-     * Implementations may load translations from local files, databases, remote APIs,
-     * or other external sources.
-     * </p>
+     * <p>Implementations may load translations from local files, databases, remote APIs,
+     * or other external sources.</p>
      *
-     * @param locale the {@link Locale} to load translations for, must not be {@code null}
-     * @return a map of translation keys to localized strings, never {@code null}
+     * @param locale the {@link Locale} to load translations for; must not be {@code null}
+     * @return a map of translation keys to localized strings; never {@code null}
      * @throws Exception if loading fails due to I/O errors, parsing errors,
      *                   connection issues, or invalid data formats
      */
@@ -80,14 +74,12 @@ public interface LinguaeSource {
     /**
      * Checks whether the given language is supported by this translation source.
      *
-     * <p>
-     * This method should return {@code true} if the source can provide translations
+     * <p>This method should return {@code true} if the source can provide translations
      * for the given locale, either directly or via fallback/alias mechanisms
-     * (e.g. {@code de_DE} → {@code de}).
-     * </p>
+     * (e.g. {@code de_DE} → {@code de}).</p>
      *
-     * @param locale the {@link Locale} to check, must not be {@code null}
-     * @return {@code true} if the language is supported, otherwise {@code false}
+     * @param locale the {@link Locale} to check; must not be {@code null}
+     * @return {@code true} if the language is supported; {@code false} otherwise
      */
     boolean supportsLanguage(@NonNull Locale locale);
 

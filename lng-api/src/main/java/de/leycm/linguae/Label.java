@@ -23,45 +23,11 @@ import java.util.function.Supplier;
 /**
  * A localizable text element that can be rendered into a string for a given {@link Locale}.
  *
- * <p>Labels come in two flavors:</p>
- * <ul>
- *   <li><b>Translatable</b> – resolved at runtime via resource bundles keyed by a translation key.</li>
- *   <li><b>Literal</b> – static text returned verbatim, without any lookup.</li>
- * </ul>
- *
- * <p>Both variants support <em>placeholder mappings</em> (see {@link #withMapping}), which are
- * applied after translation to substitute dynamic values into the rendered string.</p>
- *
- * <p>Rendered output is obtained through the family of {@code in(…)} methods (raw translation)
- * and {@code mapped(…)} methods (translation with placeholder substitution applied).
- * Convenience overloads without a {@link Locale} argument fall back to
- * {@link LinguaeProvider#getLocale()}.</p>
- *
- * <h2>Creating labels</h2>
- * <pre>{@code
- * // Translatable – uses the default provider
- * Label greeting = Label.of("ui.greeting");
- * Label greeting = Label.of("ui.greeting", "Hello!");          // with static fallback
- * Label greeting = Label.of("ui.greeting", locale -> "Hello"); // with locale-aware fallback
- *
- * // Literal – never looked up in a resource bundle
- * Label title = Label.literal("Hello, World!");
- * }</pre>
- *
- * <h2>Placeholder mappings</h2>
- * <pre>{@code
- * Label message = Label.of("ui.welcome")
- *     .withMapping("name", user::getDisplayName)
- *     .withMapping("count", () -> inbox.size());
- *
- * String rendered = message.mapped(); // e.g. "Welcome, Alice! You have 3 messages."
- * }</pre>
- *
- * <p>Implementations must be immutable and thread-safe.</p>
+ * <p>Labels support translation via resource bundles and placeholder mapping.
+ * Use {@link #of(String)} for translatable labels or {@link #literal(String)} for static text.</p>
  *
  * @see LinguaeProvider
  * @see Mappings
- * @see Mapping
  * @since 1.0.1
  * @author Lennard <a href="mailto:leycm@proton.me">leycm@proton.me</a>
  */
@@ -415,7 +381,7 @@ public interface Label {
      * content), and registered mappings. Implementations must be consistent with
      * {@link #hashCode()}.</p>
      *
-     * @param obj the reference object with which to compare
+     * @param obj the reference object with which to compare; may be {@code null}
      * @return {@code true} if the given object represents an equivalent label
      */
     @Override

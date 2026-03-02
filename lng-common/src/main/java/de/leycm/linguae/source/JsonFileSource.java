@@ -28,6 +28,35 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * A {@link LinguaeSource} implementation that loads translations from JSON files.
+ *
+ * <p>This implementation supports both local file system and remote HTTP sources:
+ * <ul>
+ *   <li>Local: {@code /path/to/translations/}</li>
+ *   <li>Remote: {@code https://example.com/translations/}</li>
+ * </ul>
+ * </p>
+ *
+ * <p>Translation files must be named according to the locale language tag,
+ * for example: {@code en_US.json}, {@code de_DE.json}, {@code zh_CN.json}.</p>
+ *
+ * <p>Each JSON file should contain a flat map of translation keys to values:</p>
+ * <pre>{@code
+ * {
+ *   "welcome": "Welcome!",
+ *   "goodbye": "Goodbye!",
+ *   "user.count": "Users: %count%"
+ * }
+ * }</pre>
+ *
+ * <p>For remote sources, only the {@link #loadLanguage(Locale)} and {@link #supportsLanguage(Locale)}
+ * methods are supported. {@link #getSupportedLanguages()} returns an empty list for remote sources
+ * as directory scanning is not possible over HTTP.</p>
+ *
+ * @since 1.2.0
+ * @author Lennard <a href="mailto:leycm@proton.me">leycm@proton.me</a>
+ */
 public class JsonFileSource implements LinguaeSource {
 
     private static final Type MAP_TYPE = new TypeToken<Map<String, String>>(){}.getType();
@@ -37,6 +66,15 @@ public class JsonFileSource implements LinguaeSource {
     private final HttpClient client;
     private final boolean remote;
 
+    /**
+     * Constructs a new {@link JsonFileSource} with the specified base path.
+     *
+     * <p>The base path can be either a local directory path or a remote HTTP URL.
+     * If the path does not end with {@code /}, it will be automatically appended.</p>
+     *
+     * @param basePath the base path to translation files; must not be {@code null}
+     * @throws NullPointerException if {@code basePath} is {@code null}
+     */
     public JsonFileSource(@NonNull String basePath) {
         this.basePath = basePath.endsWith("/") ? basePath : basePath + "/";
         this.gson = new Gson();
@@ -44,6 +82,15 @@ public class JsonFileSource implements LinguaeSource {
         this.remote = basePath.startsWith("http://") || basePath.startsWith("https://");
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>For remote sources, this method returns an empty list as directory scanning
+     * is not possible over HTTP. For local sources, it scans the directory
+     * for {@code .json} files and converts filenames to {@link Locale} objects.</p>
+     *
+     * @return a list of supported {@link Locale} instances; empty for remote sources
+     */
     @Override
     public @NonNull List<Locale> getSupportedLanguages() {
         if (remote) return List.of();
@@ -64,18 +111,38 @@ public class JsonFileSource implements LinguaeSource {
         } catch (Exception e) {return List.of();}
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Loads translations from either a local JSON file or remote HTTP endpoint.
+     * The filename is derived from the locale language tag with dashes replaced
+     * by underscores (e.g. {@code zh-CN} → {@code zh_CN.json}).</p>
+     *
+     * @param locale the {@link Locale} to load translations for; must not be {@code null}.
+     * @return a map of translation keys to localized strings; empty if the file is not found.
+     * @throws Exception if loading fails due to I/O errors, network issues, or JSON parsing errors.
+     * @throws NullPointerException if {@code locale} is {@code null}
+     */
     @Override
     public @NonNull Map<String, String> loadLanguage(@NonNull Locale locale) throws Exception {
         String fileName = locale.toLanguageTag().replace("-", "_") + ".json";
 
-        if (remote) {
-            return loadRemote(fileName);
-        } else {
-            return loadLocal(fileName);
-        }
+        if (remote) {return loadRemote(fileName);
+        } else {return loadLocal(fileName);}
     }
 
-    private @NonNull Map<String, String> loadRemote(String fileName) throws Exception {
+    /**
+     * Loads translations from a remote HTTP endpoint.
+     *
+     * <p>Sends a GET request to {@code basePath + fileName} and parses the response
+     * as JSON. Returns an empty map if the response status is not 200 or the body is empty.</p>
+     *
+     * @param fileName the JSON filename to load; must not be {@code null}
+     * @return a map of translation keys to values; empty if request fails or returns invalid data
+     * @throws Exception if the HTTP request fails or JSON parsing encounters an error
+     * @throws NullPointerException if {@code fileName} is {@code null}
+     */
+    private @NonNull Map<String, String> loadRemote(@NonNull String fileName) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(basePath + fileName))
                 .GET()
@@ -91,7 +158,18 @@ public class JsonFileSource implements LinguaeSource {
         return map != null ? map : Map.of();
     }
 
-    private @NonNull Map<String, String> loadLocal(String fileName) throws Exception {
+    /**
+     * Loads translations from a local JSON file.
+     *
+     * <p>Reads the file from {@code basePath + fileName} and parses it as JSON.
+     * Returns an empty map if the file does not exist.</p>
+     *
+     * @param fileName the JSON filename to load; must not be {@code null}
+     * @return a map of translation keys to values; empty if file not found
+     * @throws Exception if file reading fails or JSON parsing encounters an error
+     * @throws NullPointerException if {@code fileName} is {@code null}
+     */
+    private @NonNull Map<String, String> loadLocal(@NonNull String fileName) throws Exception {
         Path path = Paths.get(basePath + fileName);
 
         if (!Files.exists(path)) {
@@ -105,12 +183,23 @@ public class JsonFileSource implements LinguaeSource {
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>For remote sources, sends a HEAD request to check if the file exists.
+     * For local sources, checks if the file exists on the file system.</p>
+     *
+     * @param locale the {@link Locale} to check; must not be {@code null}
+     * @return {@code true} if the translation file exists; {@code false} otherwise
+     * @throws NullPointerException if {@code locale} is {@code null}
+     */
     @Override
     public boolean supportsLanguage(@NonNull Locale locale) {
         String fileName = locale.toLanguageTag().replace("-", "_") + ".json";
 
         if (remote) {
-            try {HttpRequest request = HttpRequest.newBuilder()
+            try {
+                HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create(basePath + fileName))
                         .method("HEAD", HttpRequest.BodyPublishers.noBody())
                         .build();
