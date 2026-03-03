@@ -6,9 +6,9 @@
 # ────────────────────
 #  Gradle
 # ────────────────────
-.gradle/
-build/
-gradle
+**/.gradle/
+**/build/
+**/gradle
 gradlew
 gradlew.bat
 
