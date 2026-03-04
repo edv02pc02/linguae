@@ -10,7 +10,7 @@
  */
 package de.leycm.linguae;
 
-import de.leycm.linguae.exeption.FormatException;
+import de.leycm.linguae.exception.FormatException;
 import de.leycm.linguae.mapping.MappingRule;
 
 import de.leycm.linguae.source.LinguaeSource;

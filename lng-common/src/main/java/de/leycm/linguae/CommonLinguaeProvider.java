@@ -10,8 +10,8 @@
  */
 package de.leycm.linguae;
 
-import de.leycm.linguae.exeption.FormatException;
-import de.leycm.linguae.exeption.IncompatibleMatchException;
+import de.leycm.linguae.exception.FormatException;
+import de.leycm.linguae.exception.IncompatibleMatchException;
 import de.leycm.linguae.label.LiteralLabel;
 import de.leycm.linguae.label.LocaleLabel;
 import de.leycm.linguae.mapping.MappingRule;

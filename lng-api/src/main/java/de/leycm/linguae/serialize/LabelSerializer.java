@@ -11,7 +11,7 @@
 package de.leycm.linguae.serialize;
 
 import de.leycm.linguae.Label;
-import de.leycm.linguae.exeption.FormatException;
+import de.leycm.linguae.exception.FormatException;
 import lombok.NonNull;
 
 import java.text.ParseException;

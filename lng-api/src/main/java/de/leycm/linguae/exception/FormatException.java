@@ -8,7 +8,7 @@
  * Copyright (c) leycm <leycm@proton.me>
  * Copyright (c) maintainers
  */
-package de.leycm.linguae.exeption;
+package de.leycm.linguae.exception;
 
 import lombok.NonNull;
 

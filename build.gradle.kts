@@ -90,12 +90,6 @@ subprojects {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
-    dependencies {
-        rootProject.configurations.findByName("implementation")?.dependencies?.forEach { dep ->
-            implementation(dep)
-        }
-    }
-
     publishing {
         publications {
             create<MavenPublication>("mavenJava") {
