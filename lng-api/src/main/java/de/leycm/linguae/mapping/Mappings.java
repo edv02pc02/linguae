@@ -199,15 +199,15 @@ public final class Mappings {
     }
 
     /**
-     * Returns an unmodifiable view of the list of mappings in this container.
+     * Returns an unmodifiable copy of the list of mappings in this container.
      *
-     * <p>The returned list is a copy of the internal list to ensure immutability.
+     * <p>The returned list is a snapshot copy of the internal list to ensure immutability.
      * Modifying the returned list does not affect this {@link Mappings} instance.</p>
      *
      * @return an unmodifiable list of mappings; never {@code null}
      */
     public @NonNull List<Mapping> mappings() {
-        return Collections.unmodifiableList(mappings);
+        return List.copyOf(mappings);
     }
 
     /**
