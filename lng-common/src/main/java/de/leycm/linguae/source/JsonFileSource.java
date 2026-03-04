@@ -85,35 +85,6 @@ public class JsonFileSource implements LinguaeSource {
     /**
      * {@inheritDoc}
      *
-     * <p>For remote sources, this method returns an empty list as directory scanning
-     * is not possible over HTTP. For local sources, it scans the directory
-     * for {@code .json} files and converts filenames to {@link Locale} objects.</p>
-     *
-     * @return a list of supported {@link Locale} instances; empty for remote sources
-     */
-    @Override
-    public @NonNull List<Locale> getSupportedLanguages() {
-        if (remote) return List.of();
-
-        try {
-            Path dir = Paths.get(basePath);
-            if (!Files.exists(dir) || !Files.isDirectory(dir)) return List.of();
-
-            try (var stream = Files.list(dir)) {
-                return stream
-                        .filter(p -> p.getFileName().toString().endsWith(".json"))
-                        .map(p -> p.getFileName().toString().replace(".json", ""))
-                        .map(name -> name.replace("_", "-"))
-                        .map(Locale::forLanguageTag)
-                        .collect(Collectors.toList());
-            }
-
-        } catch (Exception e) {return List.of();}
-    }
-
-    /**
-     * {@inheritDoc}
-     *
      * <p>Loads translations from either a local JSON file or remote HTTP endpoint.
      * The filename is derived from the locale language tag with dashes replaced
      * by underscores (e.g. {@code zh-CN} → {@code zh_CN.json}).</p>

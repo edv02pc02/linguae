@@ -45,16 +45,6 @@ import java.util.Map;
 public interface LinguaeSource {
 
     /**
-     * Returns all languages that are supported by this translation source.
-     *
-     * <p>Implementations may return an empty list if supported languages cannot be
-     * determined (e.g. remote directory scanning is unavailable, disabled, or failed).</p>
-     *
-     * @return an immutable or mutable list of supported {@link Locale} instances; never {@code null}
-     */
-    @NonNull List<Locale> getSupportedLanguages();
-
-    /**
      * Loads all translations for the given language.
      *
      * <p>The returned map must contain translation keys as map keys and their resolved
