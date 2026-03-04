@@ -294,8 +294,11 @@ public class CommonLinguaeProvider implements LinguaeProvider {
     @Contract("_, _ -> fail")
     private void throwCachedException(final @NonNull String localeTag,
                                       final @NonNull AtomicReference<RuntimeException> exception) {
-        throw new RuntimeException("Fail to load and cache the language \"" + localeTag +
-                        "\" this fail is cached and will not be retried until the cache gets cleared", exception.get());
+        throw new RuntimeException(
+                "Failed to load translations for locale \"" + localeTag
+                        + "\"; failure is cached and will not be retried until the cache is cleared",
+                exception.get()
+        );
     }
 
     /**
