@@ -36,7 +36,7 @@ dependencyResolutionManagement {
 }
 
 // Project Includes
-rootProject.name = "ley-linguae"
+rootProject.name = "linguae"
 
 include("api", "common")
 
