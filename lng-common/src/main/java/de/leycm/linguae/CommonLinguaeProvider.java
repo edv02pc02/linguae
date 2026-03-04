@@ -133,8 +133,9 @@ public class CommonLinguaeProvider implements LinguaeProvider {
          * Builds a new {@link CommonLinguaeProvider} with the configured settings.
          *
          * @param source the source for loading translation data; must not be {@code null}
+         * @param locales the locales to warm up; must not be {@code null}
          * @return a new configured provider instance; never {@code null}
-         * @throws NullPointerException if {@code source} is {@code null}
+         * @throws NullPointerException if {@code source} or {@code locales} is {@code null}
          */
         public CommonLinguaeProvider buildWarm(final @NonNull LinguaeSource source, final @NonNull Locale... locales) {
             CommonLinguaeProvider provider = new CommonLinguaeProvider(serializerRegistry, mappingRule, source, locale);

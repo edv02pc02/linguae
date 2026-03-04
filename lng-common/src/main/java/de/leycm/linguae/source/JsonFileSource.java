@@ -29,12 +29,11 @@ import java.util.Map;
 /**
  * A {@link LinguaeSource} implementation that loads translations from JSON files.
  *
- * <p>This implementation supports both local file system and remote HTTP sources:
+ * <p>This implementation supports both local file system and remote HTTP sources:</p>
  * <ul>
  *   <li>Local: {@code /path/to/translations/}</li>
  *   <li>Remote: {@code https://example.com/translations/}</li>
  * </ul>
- * </p>
  *
  * <p>Translation files must be named according to the locale language tag,
  * for example: {@code en_US.json}, {@code de_DE.json}, {@code zh_CN.json}.</p>
@@ -72,6 +71,7 @@ public class JsonFileSource implements LinguaeSource {
      * @param basePath the base path to translation files; must not be {@code null}
      * @throws NullPointerException if {@code basePath} is {@code null}
      */
+    @SuppressWarnings("HttpUrlsUsage")
     public JsonFileSource(@NonNull String basePath) {
         this.basePath = basePath.endsWith("/") ? basePath : basePath + "/";
         this.gson = new Gson();
