@@ -92,7 +92,11 @@ public record LiteralLabel(
      */
     @Override
     public @NonNull String toString() {
-        return provider().serialize(this, String.class);
+        try {
+            return provider().serialize(this, String.class);
+        } catch (Exception e) {
+            return "LiteralLabel[" + literal + "]";
+        }
     }
 
     /**
@@ -113,7 +117,9 @@ public record LiteralLabel(
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         LiteralLabel that = (LiteralLabel) obj;
-        return literal.equals(that.literal);
+        return literal.equals(that.literal)
+                && provider.equals(that.provider)
+                && mappings.equals(that.mappings);
     }
 
     /**

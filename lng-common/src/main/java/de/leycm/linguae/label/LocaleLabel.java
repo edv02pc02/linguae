@@ -91,7 +91,11 @@ public record LocaleLabel(
      */
     @Override
     public @NonNull String toString() {
-        return provider().serialize(this, String.class);
+        try {
+            return provider().serialize(this, String.class);
+        } catch (Exception e) {
+            return "LocaleLabel[" + key + "]";
+        }
     }
 
     /**
@@ -112,7 +116,9 @@ public record LocaleLabel(
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         LocaleLabel that = (LocaleLabel) obj;
-        return key().equals(that.key());
+        return key().equals(that.key())
+                && provider.equals(that.provider)
+                && mappings.equals(that.mappings);
     }
 
     /**
