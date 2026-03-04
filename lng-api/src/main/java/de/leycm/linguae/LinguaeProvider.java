@@ -89,6 +89,23 @@ public interface LinguaeProvider extends Initializable {
     @NonNull MappingRule getMappingRule();
 
     /**
+     * Warms up the provider by preloading translations for the specified locales.
+     *
+     * <p>This method can be used to reduce latency on first translation requests by
+     * loading necessary translation data into memory ahead of time. If no locales are
+     * specified, it defaults to warming up all supported languages from the source.</p>
+     *
+     * @param locales the locales to warm up; if empty, all supported languages will be warmed up
+     */
+    default void warmUp(final @NonNull Locale @NonNull ... locales) {
+        for (Locale locale : locales) {
+            try {getSource().loadLanguage(locale);} catch (Exception e) {
+                throw new RuntimeException("Failed to load translations for locale " + locale + ": " + e.getMessage());
+            }
+        };
+    }
+
+    /**
      * Parses a string representation into a label instance.
      *
      * <p>The parsing format is implementation-dependent but typically
