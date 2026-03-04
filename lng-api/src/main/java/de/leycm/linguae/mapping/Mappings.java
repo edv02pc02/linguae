@@ -15,7 +15,9 @@ import de.leycm.linguae.LinguaeProvider;
 import lombok.NonNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -27,19 +29,13 @@ import java.util.function.Supplier;
  *
  * <p>Instances are immutable - all modification operations return new instances.</p>
  *
- * @since 1.0.1
  * @author Lennard <a href="mailto:leycm@proton.me">leycm@proton.me</a>
- * @param mappings a List of Mapping objects to start with
+ * @since 1.0.1
  */
-public record Mappings(@NonNull List<Mapping> mappings,
-                       @NonNull LinguaeProvider provider) {
-
-    /**
-     * Constructs an empty {@link Mappings} with no mappings.
-     */
-    public Mappings() {
-        this(new ArrayList<>());
-    }
+@SuppressWarnings("ClassCanBeRecord") // can not be a record due to its mutable structure, using a record here would be an antipattern
+public final class Mappings {
+    private final @NonNull List<Mapping> mappings;
+    private final @NonNull LinguaeProvider provider;
 
     /**
      * Constructs an empty {@link Mappings} with no mappings but a specified {@link LinguaeProvider}.
@@ -54,7 +50,7 @@ public record Mappings(@NonNull List<Mapping> mappings,
     }
 
     /**
-     * Constructs a {@link Mappings} with the specified mappings.
+     * Constructs a {@link Mappings} with the specified mappings and the default {@link LinguaeProvider#getInstance()}.
      *
      * <p>The provided list is copied to ensure immutability. Uses the default
      * {@link LinguaeProvider} instance for resolving mapping rules.</p>
@@ -87,7 +83,7 @@ public record Mappings(@NonNull List<Mapping> mappings,
      * <p>This is a convenience method that uses the singleton {@link LinguaeProvider}
      * instance and its default placeholder rule.</p>
      *
-     * @param key the placeholder key to replace; must not be {@code null}
+     * @param key   the placeholder key to replace; must not be {@code null}
      * @param value the value to substitute; must not be {@code null}
      * @return a new {@link Mappings} instance with the added mapping; never {@code null}
      * @throws NullPointerException if {@code key} or {@code value} is {@code null}
@@ -103,7 +99,7 @@ public record Mappings(@NonNull List<Mapping> mappings,
      * <p>This is a convenience method that uses the singleton {@link LinguaeProvider}
      * instance and its default placeholder rule.</p>
      *
-     * @param key the placeholder key to replace; must not be {@code null}
+     * @param key      the placeholder key to replace; must not be {@code null}
      * @param supplier the supplier providing the value to substitute; must not be {@code null}
      * @return this {@link Mappings} instance with the added mapping; never {@code null}
      * @throws NullPointerException if {@code key} or {@code supplier} is {@code null}
@@ -120,7 +116,7 @@ public record Mappings(@NonNull List<Mapping> mappings,
      * Returns this {@link Mappings} instance, leaving the original unchanged.</p>
      *
      * @param provider the {@link LinguaeProvider} to get the default placeholder rule from; must not be {@code null}
-     * @param key the placeholder key to replace; must not be {@code null}
+     * @param key      the placeholder key to replace; must not be {@code null}
      * @param supplier the supplier providing the value to substitute; must not be {@code null}
      * @return this {@link Mappings} instance with the added mapping; never {@code null}
      * @throws NullPointerException if {@code provider}, {@code key}, or {@code supplier} is {@code null}
@@ -137,8 +133,8 @@ public record Mappings(@NonNull List<Mapping> mappings,
      * <p>The value is converted to string using {@code String#valueOf(Object)}.
      * Returns this {@link Mappings} instance, leaving the original unchanged.</p>
      *
-     * @param rule the mapping rule to use for this placeholder; must not be {@code null}
-     * @param key the placeholder key to replace; must not be {@code null}
+     * @param rule     the mapping rule to use for this placeholder; must not be {@code null}
+     * @param key      the placeholder key to replace; must not be {@code null}
      * @param supplier the supplier providing the value to substitute; must not be {@code null}
      * @return this {@link Mappings} instance with the added mapping; never {@code null}
      * @throws NullPointerException if {@code rule}, {@code key}, or {@code supplier} is {@code null}
@@ -201,4 +197,71 @@ public record Mappings(@NonNull List<Mapping> mappings,
     public boolean isEmpty() {
         return mappings.isEmpty();
     }
+
+    /**
+     * Returns an unmodifiable copy of the list of mappings in this container.
+     *
+     * <p>The returned list is a snapshot copy of the internal list to ensure immutability.
+     * Modifying the returned list does not affect this {@link Mappings} instance.</p>
+     *
+     * @return an unmodifiable list of mappings; never {@code null}
+     */
+    public @NonNull List<Mapping> mappings() {
+        return List.copyOf(mappings);
+    }
+
+    /**
+     * Returns the {@link LinguaeProvider} associated with this container.
+     *
+     * @return the provider; never {@code null}
+     */
+    public @NonNull LinguaeProvider provider() {
+        return provider;
+    }
+
+    /**
+     * Compares this {@link Mappings} instance to another object for equality.
+     *
+     * <p>Two {@link Mappings} instances are considered equal if they have the same
+     * list of mappings and the same provider. The order of mappings is significant.</p>
+     *
+     * @param obj the reference object with which to compare
+     * @return {@code true} if this object is equal to the given object; {@code false} otherwise
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (Mappings) obj;
+        return Objects.equals(this.mappings, that.mappings) &&
+                Objects.equals(this.provider, that.provider);
+    }
+
+    /**
+     * Returns a hash code value for this {@link Mappings} instance.
+     *
+     * <p>The hash code is computed based on the list of mappings and the provider,
+     * consistent with the definition of equality in {@link #equals(Object)}.</p>
+     *
+     * @return the hash code value for this object
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(mappings, provider);
+    }
+
+    /**
+     * Returns a string representation of this {@link Mappings} instance.
+     *
+     * <p>The string includes the list of mappings and the provider for debugging purposes.</p>
+     *
+     * @return a string representation of this object
+     */
+    @Override
+    public String toString() {
+        return "Mappings[" +
+                "mappings=" + mappings + ", " +
+                "provider=" + provider + ']';
+    }
+
 }

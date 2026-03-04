@@ -41,12 +41,22 @@ import java.util.Locale;
  *
  * @since 1.0.1
  * @author Lennard <a href="mailto:leycm@proton.me">leycm@proton.me</a>
+ * @param provider the provider for serialization; must not be {@code null}
+ * @param mappings the mappings for placeholder substitution; must not be {@code null}
+ * @param literal the static text content; must not be {@code null}
  */
 public record LiteralLabel(
         @NonNull LinguaeProvider provider,
         @NonNull Mappings mappings,
         @NonNull String literal
 ) implements Label {
+
+    /**
+     * Compact constructor for validation.
+     *
+     * @throws NullPointerException if any parameter is {@code null}
+     */
+    public LiteralLabel { }
 
     /**
      * Creates a new {@link LiteralLabel} with default empty mappings.
@@ -92,7 +102,11 @@ public record LiteralLabel(
      */
     @Override
     public @NonNull String toString() {
-        return provider().serialize(this, String.class);
+        try {
+            return provider().serialize(this, String.class);
+        } catch (Exception e) {
+            return "LiteralLabel[" + literal + "]";
+        }
     }
 
     /**
@@ -113,7 +127,9 @@ public record LiteralLabel(
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         LiteralLabel that = (LiteralLabel) obj;
-        return literal.equals(that.literal);
+        return literal.equals(that.literal)
+                && provider.equals(that.provider)
+                && mappings.equals(that.mappings);
     }
 
     /**

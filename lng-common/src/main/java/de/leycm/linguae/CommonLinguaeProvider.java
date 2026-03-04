@@ -10,8 +10,8 @@
  */
 package de.leycm.linguae;
 
-import de.leycm.linguae.exeption.FormatException;
-import de.leycm.linguae.exeption.IncompatibleMatchException;
+import de.leycm.linguae.exception.FormatException;
+import de.leycm.linguae.exception.IncompatibleMatchException;
 import de.leycm.linguae.label.LiteralLabel;
 import de.leycm.linguae.label.LocaleLabel;
 import de.leycm.linguae.mapping.MappingRule;
@@ -128,6 +128,20 @@ public class CommonLinguaeProvider implements LinguaeProvider {
         public CommonLinguaeProvider build(final @NonNull LinguaeSource source) {
             return new CommonLinguaeProvider(serializerRegistry, mappingRule, source, locale);
         }
+
+        /**
+         * Builds a new {@link CommonLinguaeProvider} with the configured settings.
+         *
+         * @param source the source for loading translation data; must not be {@code null}
+         * @param locales the locales to warm up; must not be {@code null}
+         * @return a new configured provider instance; never {@code null}
+         * @throws NullPointerException if {@code source} or {@code locales} is {@code null}
+         */
+        public CommonLinguaeProvider buildWarm(final @NonNull LinguaeSource source, final @NonNull Locale... locales) {
+            CommonLinguaeProvider provider = new CommonLinguaeProvider(serializerRegistry, mappingRule, source, locale);
+            provider.warmUp(locales);
+            return provider;
+        }
     }
 
     private final Map<String, Map<String, String>> translationCache = new ConcurrentHashMap<>();
@@ -196,7 +210,8 @@ public class CommonLinguaeProvider implements LinguaeProvider {
      * @throws NullPointerException if {@code key} or {@code fallback} is {@code null}
      */
     @Override
-    public @NonNull Label createLabel(@NonNull String key, @NonNull Function<Locale, String> fallback) {
+    public @NonNull Label createLabel(@NonNull String key,
+                                      @NonNull Function<Locale, String> fallback) {
         return new LocaleLabel(this, key, fallback);
     }
 
@@ -227,36 +242,62 @@ public class CommonLinguaeProvider implements LinguaeProvider {
                                      final @NonNull Locale locale) {
 
         final AtomicReference<RuntimeException> exception = new AtomicReference<>();
-        final String localeTag = locale.toLanguageTag();
+
         final Locale defaultLocale = getLocale();
+        final String localeTag = locale.toLanguageTag();
         final String defaultTag = defaultLocale.toLanguageTag();
 
-        Map<String, String> localeMap = translationCache.computeIfAbsent(localeTag, tag ->
-                loadTranslationsSafe(locale, exception)
+        Map<String, String> localeMap = translationCache.computeIfAbsent(
+                localeTag,
+                tag -> loadTranslationsSafe(locale, exception)
         );
 
-        String value = localeMap.computeIfAbsent(key, k -> {
-
-            if (!locale.equals(defaultLocale)) {
-                Map<String, String> defaultMap = translationCache.computeIfAbsent(defaultTag, tag ->
-                        loadTranslationsSafe(defaultLocale, exception)
-                );
-
-                String defaultValue = defaultMap.get(k);
-                if (defaultValue != null) {
-                    localeMap.put(k, defaultValue);
-                    return defaultValue;
-                }
+        String value = localeMap.get(key);
+        if (value != null) {
+            if (exception.get() != null) {
+                throwCachedException(localeTag, exception);
             }
-
-            return fallback.apply(locale);
-        });
-
-        if (exception.get() != null) {
-            throw exception.get();
+            return value;
         }
 
-        return value;
+        if (!locale.equals(defaultLocale)) {
+
+            Map<String, String> defaultMap = translationCache.computeIfAbsent(
+                    defaultTag,
+                    tag -> loadTranslationsSafe(defaultLocale, exception)
+            );
+
+            String defaultValue = defaultMap.get(key);
+
+            if (defaultValue != null) {
+                localeMap.putIfAbsent(key, defaultValue);
+
+                if (exception.get() != null) {
+                    throwCachedException(localeTag, exception);
+                }
+
+                return defaultValue;
+            }
+        }
+
+        String fallbackValue = fallback.apply(locale);
+        localeMap.putIfAbsent(key, fallbackValue);
+
+        if (exception.get() != null) {
+            throwCachedException(localeTag, exception);
+        }
+
+        return fallbackValue;
+    }
+
+    @Contract("_, _ -> fail")
+    private void throwCachedException(final @NonNull String localeTag,
+                                      final @NonNull AtomicReference<RuntimeException> exception) {
+        throw new RuntimeException(
+                "Failed to load translations for locale \"" + localeTag
+                        + "\"; failure is cached and will not be retried until the cache is cleared",
+                exception.get()
+        );
     }
 
     /**
@@ -273,14 +314,12 @@ public class CommonLinguaeProvider implements LinguaeProvider {
      */
     @Contract("_, _ -> new")
     private @NonNull Map<String, String> loadTranslationsSafe(@NonNull Locale locale,
-                                                               @NonNull AtomicReference<RuntimeException> exception) {
+                                                              @NonNull AtomicReference<RuntimeException> exception) {
         try {
             Map<String, String> translations = source.loadLanguage(locale);
             return new ConcurrentHashMap<>(translations);
         } catch (Exception e) {
-            exception.set(new RuntimeException(
-                    "Failed to load translations for locale: " + locale.toLanguageTag(), e
-            ));
+            exception.set(new RuntimeException("Failed to load translations for locale: " + locale.toLanguageTag(), e));
             return new ConcurrentHashMap<>();
         }
     }

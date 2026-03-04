@@ -37,6 +37,10 @@ import java.util.function.Function;
  *
  * @since 1.0.1
  * @author Lennard <a href="mailto:leycm@proton.me">leycm@proton.me</a>
+ * @param provider the provider for translation lookup; must not be {@code null}
+ * @param mappings the mappings for placeholder substitution; must not be {@code null}
+ * @param key the translation key; must not be {@code null}
+ * @param fallback the fallback function for missing translations; must not be {@code null}
  */
 public record LocaleLabel(
         @NonNull LinguaeProvider provider,
@@ -44,6 +48,13 @@ public record LocaleLabel(
         @NonNull String key,
         @NonNull Function<Locale, String> fallback
         ) implements Label {
+
+    /**
+     * Compact constructor for validation.
+     *
+     * @throws NullPointerException if any parameter is {@code null}
+     */
+    public LocaleLabel { }
 
     /**
      * Creates a new {@link LocaleLabel} with default empty mappings.
@@ -91,7 +102,11 @@ public record LocaleLabel(
      */
     @Override
     public @NonNull String toString() {
-        return provider().serialize(this, String.class);
+        try {
+            return provider().serialize(this, String.class);
+        } catch (Exception e) {
+            return "LocaleLabel[" + key + "]";
+        }
     }
 
     /**
@@ -112,7 +127,9 @@ public record LocaleLabel(
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         LocaleLabel that = (LocaleLabel) obj;
-        return key().equals(that.key());
+        return key().equals(that.key())
+                && provider.equals(that.provider)
+                && mappings.equals(that.mappings);
     }
 
     /**

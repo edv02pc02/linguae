@@ -130,7 +130,7 @@ public interface Label {
      * using the default {@link LinguaeProvider}.
      *
      * <p>Literal labels are returned as-is and are never looked up in a resource bundle.
-     * They are useful for dynamic or already-localised strings that should still
+     * They are useful for dynamic or already-localized strings that should still
      * participate in the {@link Label} abstraction (e.g. for consistent component handling).</p>
      *
      * @param literal the static text content; must not be {@code null}
@@ -183,9 +183,9 @@ public interface Label {
      * @return this label instance; never {@code null}
      * @throws NullPointerException if {@code key} or {@code value} is {@code null}
      */
-    default @NonNull Label withMapping(final @NonNull String key,
+    default @NonNull Label mapTo(final @NonNull String key,
                                        final @NonNull Object value) {
-        return withMapping(key, () -> value);
+        return mapTo(key, () -> value);
     }
 
     /**
@@ -199,9 +199,9 @@ public interface Label {
      * @return this label instance; never {@code null}
      * @throws NullPointerException if {@code key} or {@code supplier} is {@code null}
      */
-    default @NonNull Label withMapping(final @NonNull String key,
+    default @NonNull Label mapTo(final @NonNull String key,
                                        final @NonNull Supplier<Object> supplier) {
-        return withMapping(provider().getMappingRule(), key, supplier);
+        return mapTo(provider().getMappingRule(), key, supplier);
     }
 
     /**
@@ -217,10 +217,10 @@ public interface Label {
      * @return this label instance; never {@code null}
      * @throws NullPointerException if {@code rule}, {@code key}, or {@code supplier} is {@code null}
      */
-    default @NonNull Label withMapping(final @NonNull MappingRule rule,
+    default @NonNull Label mapTo(final @NonNull MappingRule rule,
                                        final @NonNull String key,
                                        final @NonNull Supplier<Object> supplier) {
-        return withMapping(new Mapping(rule, key, () -> String.valueOf(supplier.get())));
+        return mapTo(new Mapping(rule, key, () -> String.valueOf(supplier.get())));
     }
 
     /**
@@ -230,7 +230,7 @@ public interface Label {
      * @return this label instance; never {@code null}
      * @throws NullPointerException if {@code mapping} is {@code null}
      */
-    default @NonNull Label withMapping(final @NonNull Mapping mapping) {
+    default @NonNull Label mapTo(final @NonNull Mapping mapping) {
         mappings().add(mapping);
         return this;
     }

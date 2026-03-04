@@ -10,7 +10,7 @@
  */
 package de.leycm.linguae;
 
-import de.leycm.linguae.exeption.FormatException;
+import de.leycm.linguae.exception.FormatException;
 import de.leycm.linguae.mapping.MappingRule;
 
 import de.leycm.linguae.source.LinguaeSource;
@@ -87,6 +87,28 @@ public interface LinguaeProvider extends Initializable {
      * @return the default mapping rule; never {@code null}
      */
     @NonNull MappingRule getMappingRule();
+
+    /**
+     * Warms up the provider by preloading translations for the specified locales.
+     *
+     * <p>This method can be used to reduce latency on first translation requests by
+     * loading necessary translation data into memory ahead of time. If no locales are
+     * specified, the provider's {@linkplain #getLocale() default locale} will be warmed up.</p>
+     *
+     * @param locales the locales to warm up; if empty, the provider's default locale will be warmed up
+     */
+    default void warmUp(final @NonNull Locale @NonNull ... locales) {
+        final Locale[] effectiveLocales = (locales.length == 0)
+                ? new Locale[] { getLocale() }
+                : locales;
+        for (Locale locale : effectiveLocales) {
+            try {
+                getSource().loadLanguage(locale);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to load translations for locale " + locale, e);
+            }
+        }
+    }
 
     /**
      * Parses a string representation into a label instance.
