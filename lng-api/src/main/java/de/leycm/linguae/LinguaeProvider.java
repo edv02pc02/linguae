@@ -93,14 +93,19 @@ public interface LinguaeProvider extends Initializable {
      *
      * <p>This method can be used to reduce latency on first translation requests by
      * loading necessary translation data into memory ahead of time. If no locales are
-     * specified, it defaults to warming up all supported languages from the source.</p>
+     * specified, the provider's {@linkplain #getLocale() default locale} will be warmed up.</p>
      *
-     * @param locales the locales to warm up; if empty, all supported languages will be warmed up
+     * @param locales the locales to warm up; if empty, the provider's default locale will be warmed up
      */
     default void warmUp(final @NonNull Locale @NonNull ... locales) {
-        for (Locale locale : locales) {
-            try {getSource().loadLanguage(locale);} catch (Exception e) {
-                throw new RuntimeException("Failed to load translations for locale " + locale + ": " + e.getMessage());
+        final Locale[] effectiveLocales = (locales.length == 0)
+                ? new Locale[] { getLocale() }
+                : locales;
+        for (Locale locale : effectiveLocales) {
+            try {
+                getSource().loadLanguage(locale);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to load translations for locale " + locale, e);
             }
         }
     }
