@@ -12,7 +12,6 @@ package de.leycm.linguae.source;
 
 import lombok.NonNull;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 

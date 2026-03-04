@@ -102,7 +102,7 @@ public interface LinguaeProvider extends Initializable {
             try {getSource().loadLanguage(locale);} catch (Exception e) {
                 throw new RuntimeException("Failed to load translations for locale " + locale + ": " + e.getMessage());
             }
-        };
+        }
     }
 
     /**

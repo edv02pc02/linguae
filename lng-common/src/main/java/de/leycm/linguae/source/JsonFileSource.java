@@ -23,10 +23,8 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * A {@link LinguaeSource} implementation that loads translations from JSON files.
@@ -51,8 +49,7 @@ import java.util.stream.Collectors;
  * }</pre>
  *
  * <p>For remote sources, only the {@link #loadLanguage(Locale)} and {@link #supportsLanguage(Locale)}
- * methods are supported. {@link #getSupportedLanguages()} returns an empty list for remote sources
- * as directory scanning is not possible over HTTP.</p>
+ * methods are supported.</p>
  *
  * @since 1.2.0
  * @author Lennard <a href="mailto:leycm@proton.me">leycm@proton.me</a>
