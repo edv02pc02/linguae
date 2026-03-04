@@ -235,7 +235,6 @@ public class CommonLinguaeProvider implements LinguaeProvider {
      * @param locale the target locale; must not be {@code null}
      * @return the translated string; never {@code null}
      * @throws NullPointerException if any parameter is {@code null}
-     * @throws NullPointerException if any parameter is {@code null}
      */
     @Override
     public @NonNull String translate(final @NonNull String key,
